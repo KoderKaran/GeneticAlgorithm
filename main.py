@@ -15,6 +15,7 @@ class Population:
         self.population = []
         self.winner = None
         self.maters = []
+        self.data = []
 
     def make_pop(self):
         for i in range(self.pop_size):
@@ -46,7 +47,6 @@ class Population:
             self.new_pop.append(offspring)
 
     def mutation(self):
-
         for i in range(len(self.new_pop)):
             list_member = list(self.new_pop[i])
             chance = ra.uniform(0, 1)
