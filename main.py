@@ -46,21 +46,13 @@ class Population:
             self.new_pop.append(offspring)
 
     def mutation(self):
-        '''
+
         for i in range(len(self.new_pop)):
             list_member = list(self.new_pop[i])
             chance = ra.uniform(0, 1)
             if chance < self.mute_rate:
                 index_affected = ra.randint(0, len(list_member)-1)
                 list_member[index_affected] = ra.choice(self.letters)
-            self.new_pop[i] = ''.join(list_member)
-            '''
-        for i in range(len(self.new_pop)):
-            list_member = list(self.new_pop[i])
-            for letter in range(len(list_member)):
-                chance = ra.uniform(0, 1)
-                if chance <= self.mute_rate:
-                    list_member[letter] = ra.choice(self.letters)
             self.new_pop[i] = ''.join(list_member)
 
     def progress(self):
