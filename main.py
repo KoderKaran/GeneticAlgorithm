@@ -1,5 +1,6 @@
 import string
 import random as ra
+import math
 
 
 class Population:
@@ -13,7 +14,7 @@ class Population:
         self.new_pop = []
         self.population = []
         self.winner = None
-        self.maters = None
+        self.maters = []
 
     def make_pop(self):
         for i in range(self.pop_size):
@@ -24,33 +25,25 @@ class Population:
     def fit_check(self, member):
         letters_member = list(member)
         letters_target = list(self.target)
-        fitness = 0
+        score = 0
         for i in range(len(letters_target)):
             if letters_target[i] == letters_member[i]:
-                fitness+=1
-        return fitness
+                score += 1
+        fitness = (score/self.size)*100
+        return math.floor(fitness)
 
     def get_mates(self):
-        mate_check = {}
         for i in self.population:
-            fit = self.fit_check(i)
-            mate_check[i] = fit
-        self.maters = sorted(mate_check, key=mate_check.get, reverse=True)[:10]
+            for j in range(self.fit_check(i)):
+                self.maters.append(i)
 
     def mate(self):
-        times = int(self.pop_size / len(self.maters))
-        for i in range(times):
-            for member in self.maters:
-                new_member = []
-                self.maters.remove(member)
-                other_mater = ra.choice(self.maters)
-                gene_pool = list(other_mater) + list(member)
-                for letter in range(len(self.target)):
-                    new_letter = ra.choice(gene_pool)
-                    new_member.append(new_letter)
-                    gene_pool.remove(new_letter)
-                self.maters.append(member)
-                self.new_pop.append(''.join(new_member))
+        for i in range(len(self.population)):
+            parent_one = list(ra.choice(self.maters))
+            parent_two = list(ra.choice(self.maters))
+            midpoint = ra.randint(0, len(parent_one) - 1)
+            offspring = "".join(parent_one[:midpoint] + parent_two[midpoint:])
+            self.new_pop.append(offspring)
 
     def mutation(self):
         '''
@@ -76,7 +69,7 @@ class Population:
         for i in self.new_pop:
             if self.fit_check(i) > high_score:
                 high_member = i
-        print("Generation: " + str(self.generations + 1) + " Closest member: " + high_member)
+        print("Generation: " + str(self.generations + 1) + "\nClosest member: " + high_member)
 
     def check(self):
         for i in self.new_pop:
@@ -87,7 +80,7 @@ class Population:
 
     def reset(self):
         self.population = self.new_pop
-        self.maters = None
+        self.maters = []
         self.new_pop = []
         self.generations += 1
 
