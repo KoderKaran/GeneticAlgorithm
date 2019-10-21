@@ -1,6 +1,8 @@
 import string
 import random as ra
 import math
+import matplotlib.pyplot as ma
+import numpy as np
 
 
 class Population:
@@ -61,7 +63,9 @@ class Population:
         for i in self.new_pop:
             if self.fit_check(i) > high_score:
                 high_member = i
-        print("Generation: " + str(self.generations + 1) + "\nClosest member: " + high_member)
+                high_score = self.fit_check(i)
+        self.data.append(high_score)
+        print("Generation: " + str(self.generations + 1) + "\nClosest member: " + high_member + "\n")
 
     def check(self):
         for i in self.new_pop:
@@ -75,6 +79,16 @@ class Population:
         self.maters = []
         self.new_pop = []
         self.generations += 1
+
+
+    def graph(self):
+        gens = list(range(0, self.generations))
+        print(self.data)
+        ma.plot(gens, self.data, color='blue')
+        ma.xlabel("Generation")
+        ma.ylabel("Best fitness")
+        ma.title("Highest fitness values by generation")
+        ma.show()
 
 
 if __name__ == "__main__":
@@ -97,4 +111,5 @@ if __name__ == "__main__":
         if pop.check():
             break
         pop.reset()
+    pop.graph()
     inp = input("")
